@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❓</text></svg>">
+<title>추억의 큐플레이</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
+<style>
+  :root {
+    --sky: #3fa2ee;
+    --sky-deep: #1f7fd8;
+    --panel: #ffffff;
+    --panel-soft: #eaf6ff;
+    --bar: #1d6fd1;
+    --bar-hi: #45aef5;
+    --ink: #13306b;
+    --ink-soft: #4a6192;
+    --line: #b3d6f3;
+    --yellow: #ffcf1f;
+    --yellow-deep: #f29a00;
+    --pink: #ff5d9e;
+    --good: #1fae6a;
+    --good-soft: #dbf6e8;
+    --bad: #e2445c;
+    --bad-soft: #fde2e6;
+    --display: "Jua", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    --body: "Gowun Dodum", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.55;
+    background-color: var(--sky);
+    background-image:
+      radial-gradient(ellipse 60% 40% at 50% -6%, rgba(255,255,255,.95) 0%, rgba(190,236,255,.6) 35%, transparent 70%),
+      linear-gradient(180deg, #5cc0ff 0%, var(--sky) 40%, var(--sky-deep) 100%);
+    background-attachment: fixed;
+    padding: 20px 16px 48px;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; display: grid; gap: 22px; position: relative; z-index: 1; }
+
+  /* ---------- sky scenery ---------- */
+  .scenery { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .cloud { position: absolute; width: 150px; height: 44px; background: #fff; border-radius: 40px; box-shadow: inset 0 -8px 0 #d6ecfb; opacity: .95; animation: drift 38s linear infinite alternate; }
+  .cloud::before, .cloud::after { content: ""; position: absolute; background: #fff; border-radius: 50%; }
+  .cloud::before { width: 64px; height: 64px; left: 22px; top: -32px; }
+  .cloud::after { width: 48px; height: 48px; left: 74px; top: -22px; }
+  .cloud.c1 { left: 4%; top: 7%; }
+  .cloud.c2 { right: 6%; top: 3%; transform: scale(.8); animation-duration: 46s; }
+  .cloud.c3 { left: -30px; top: 52%; transform: scale(1.3); animation-duration: 52s; }
+  .cloud.c4 { right: -20px; top: 34%; transform: scale(1.1); animation-duration: 42s; }
+  @keyframes drift { to { translate: 40px 0; } }
+  .island { position: absolute; width: 180px; height: 90px; }
+  .island::before { content: ""; position: absolute; inset: 0 0 auto; height: 34px; background: linear-gradient(#8fdc4a, #5fb82e); border-radius: 50% 45% 30% 30% / 70% 70% 30% 30%; border: 3px solid #3f8a1f; z-index: 1; }
+  .island::after { content: ""; position: absolute; left: 12%; right: 12%; top: 22px; bottom: 0; background: linear-gradient(#b0703a, #7a4520); clip-path: polygon(0 0, 100% 0, 80% 60%, 55% 100%, 35% 70%, 15% 55%); }
+  .island.i1 { right: -40px; bottom: 6%; }
+  .island.i2 { left: -60px; bottom: 18%; transform: scale(.7); }
+  @media (max-width: 640px) { .island { display: none; } }
+
+  /* ---------- header ---------- */
+  header.logo { display: grid; justify-items: center; gap: 12px; padding-top: 6px; text-align: center; }
+  .brand { display: grid; justify-items: center; gap: 2px; }
+  .qcoin {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff39a, var(--yellow) 45%, var(--yellow-deep));
+    border: 4px solid var(--ink); display: grid; place-items: center;
+    font: 40px/1 var(--display); color: var(--ink); box-shadow: 0 5px 0 var(--ink);
+    animation: bob 2.6s ease-in-out infinite;
+  }
+  .logo-sub { font: 26px/1 var(--display); color: #fff; -webkit-text-stroke: 7px var(--ink); paint-order: stroke fill; margin-top: 10px; }
+  .logo-main { position: relative; margin: 0; font: clamp(52px, 12vw, 84px)/1.05 var(--display); letter-spacing: 1px; }
+  .logo-main .s { color: var(--ink); -webkit-text-stroke: 14px var(--ink); text-shadow: 0 8px 0 var(--ink); }
+  .logo-main .f {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #d9f5ff 45%, #54c3ff 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .brand small { font: 15px var(--body); color: #fff; text-shadow: 0 1px 2px rgba(19,48,107,.6); margin-top: 6px; }
+
+  .nick-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(180deg, #ffe867, var(--yellow)); border: 3px solid var(--ink); border-radius: 999px;
+    padding: 5px 6px 5px 16px; box-shadow: 0 4px 0 var(--ink);
+  }
+  .nick-chip label { font: 16px var(--display); white-space: nowrap; }
+  .nick-chip input {
+    border: 2px solid var(--ink); outline: 0; font: 15px var(--body); color: var(--ink);
+    width: 150px; background: #fff; border-radius: 999px; padding: 4px 12px;
+  }
+  .nick-chip input:focus-visible { box-shadow: 0 0 0 2px var(--bar-hi); }
+  .nick-chip.need { animation: shake .35s; border-color: var(--bad); box-shadow: 0 3px 0 var(--bad); }
+  @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+  /* ---------- window panels ---------- */
+  .win {
+    background: var(--panel); border: 3px solid var(--ink); border-radius: 20px;
+    box-shadow: 0 7px 0 var(--ink), 0 14px 30px rgba(19,48,107,.25); overflow: hidden;
+  }
+  .win-bar {
+    background: linear-gradient(180deg, var(--bar-hi), var(--bar));
+    color: #fff; padding: 9px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    border-bottom: 3px solid var(--ink);
+  }
+  .win-bar h2 { margin: 0; font: 22px/1.2 var(--display); letter-spacing: .3px; -webkit-text-stroke: 5px var(--ink); paint-order: stroke fill; }
+  .win-bar .dots { display: flex; gap: 5px; }
+  .win-bar .dots i { width: 11px; height: 11px; border-radius: 50%; background: #fff; border: 2px solid var(--ink); display: block; }
+  .win-bar .dots i:nth-child(1) { background: var(--pink); }
+  .win-bar .dots i:nth-child(2) { background: var(--yellow); }
+  .win-body { padding: 20px; display: grid; gap: 18px; }
+
+  .field { display: grid; gap: 8px; }
+  .field > .lab { font: 17px var(--display); display: flex; align-items: baseline; gap: 8px; }
+  .field > .lab span { font: 13px var(--body); color: var(--ink-soft); }
+
+  .topic-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .topic-row input {
+    flex: 1 1 260px; min-width: 0;
+    font: 20px var(--body); color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 10px; padding: 12px 14px;
+    background: var(--panel-soft); outline: 0;
+  }
+  .topic-row input::placeholder { color: #8ea0c4; }
+  .topic-row input:focus-visible { background: #fff; box-shadow: 0 0 0 3px var(--yellow); }
+  .suggest { display: flex; gap: 6px; flex-wrap: wrap; }
+  .suggest button {
+    font: 13px var(--body); color: var(--bar); background: var(--panel-soft);
+    border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; cursor: pointer;
+  }
+  .suggest button:hover { background: #dcebff; }
+
+  .opts { display: grid; grid-template-columns: 1fr 1.4fr; gap: 18px; }
+  @media (max-width: 640px) { .opts { grid-template-columns: 1fr; } }
+  .seg { display: flex; border: 2px solid var(--ink); border-radius: 10px; overflow: hidden; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label {
+    flex: 1; text-align: center; padding: 10px 4px; cursor: pointer;
+    font: 17px var(--display); background: var(--panel); color: var(--ink-soft);
+    border-left: 2px solid var(--ink); user-select: none;
+  }
+  .seg label:first-of-type { border-left: 0; }
+  .seg input:checked + label { background: var(--yellow); color: var(--ink); box-shadow: inset 0 -4px 0 var(--yellow-deep); }
+  .seg input:focus-visible + label { outline: 3px solid var(--bar-hi); outline-offset: -5px; }
+
+  .btn {
+    font: 20px/1 var(--display); color: var(--ink); cursor: pointer;
+    background: linear-gradient(180deg, #ffe867 0%, var(--yellow) 55%, #ffb300 100%); border: 3px solid var(--ink); border-radius: 999px;
+    padding: 13px 26px; box-shadow: 0 4px 0 var(--ink), inset 0 2px 0 rgba(255,255,255,.7); transition: transform .06s, box-shadow .06s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn:hover { filter: brightness(1.05); }
+  .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+  .btn:focus-visible { outline: 3px solid var(--bar-hi); outline-offset: 2px; }
+  .btn:disabled { background: #e4e9f2; color: #8a95ad; cursor: not-allowed; transform: none; box-shadow: 0 4px 0 #8a95ad; border-color: #8a95ad; }
+  .btn.ghost { background: var(--panel); }
+  .btn.ghost:hover { background: var(--panel-soft); }
+  .btn.blue { background: var(--bar-hi); color: #fff; }
+  .btn.blue:hover { background: #4a89ec; }
+  .create-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .create-row .btn { flex: 0 0 auto; }
+  .note { font-size: 13px; color: var(--ink-soft); }
+  .note.err { color: var(--bad); }
+
+  /* ---------- archive ---------- */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tabs button {
+    font: 15px var(--display); color: var(--ink); cursor: pointer;
+    background: var(--panel); border: 2px solid var(--ink); border-radius: 999px; padding: 4px 12px;
+    display: inline-flex; gap: 6px; align-items: center;
+  }
+  .tabs button b { font: 12px var(--body); background: var(--panel-soft); border-radius: 999px; padding: 0 7px; font-variant-numeric: tabular-nums; }
+  .tabs button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .tabs button[aria-pressed="true"] b { background: var(--yellow); color: var(--ink); }
+  .tabs button:focus-visible { outline: 3px solid var(--bar-hi); outline-offset: 2px; }
+
+  .group { display: grid; gap: 10px; }
+  .group h3 { margin: 0; font: 18px var(--display); display: flex; align-items: center; gap: 8px; color: var(--bar); }
+  .group h3::after { content: ""; flex: 1; border-top: 2px dashed var(--line); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .card {
+    text-align: left; cursor: pointer; font: inherit; color: var(--ink);
+    background: var(--panel-soft); border: 2px solid var(--line); border-radius: 12px;
+    padding: 12px; display: grid; grid-template-columns: 48px 1fr; gap: 4px 12px; align-items: center;
+    transition: border-color .1s, transform .1s, background .1s;
+  }
+  .card:hover { border-color: var(--ink); background: #fff; transform: translateY(-2px); }
+  .card:focus-visible { outline: 3px solid var(--bar-hi); outline-offset: 2px; }
+  .card .emo {
+    grid-row: span 2; width: 48px; height: 48px; border-radius: 10px; background: #fff;
+    border: 2px solid var(--ink); display: grid; place-items: center; font-size: 26px; line-height: 1;
+  }
+  .card .t { font: 19px/1.2 var(--display); overflow-wrap: anywhere; }
+  .card .m { font-size: 12.5px; color: var(--ink-soft); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .card .by { grid-column: 1 / -1; font-size: 12.5px; color: var(--ink-soft); border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 4px; display: flex; justify-content: space-between; gap: 8px; }
+  .card .by strong { color: var(--ink); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pill { font: 12px/1 var(--display); padding: 3px 7px 2px; border-radius: 999px; border: 1.5px solid currentColor; }
+  .pill.easy { color: var(--good); }
+  .pill.normal { color: #d08400; }
+  .pill.hard { color: var(--bad); }
+  .empty { text-align: center; padding: 28px 12px; color: var(--ink-soft); border: 2px dashed var(--line); border-radius: 12px; }
+  .empty b { display: block; font: 20px var(--display); color: var(--ink); margin-bottom: 4px; }
+
+  /* ---------- loading ---------- */
+  .loading { text-align: center; padding: 40px 20px; display: grid; gap: 14px; justify-items: center; }
+  .loading .big { font: 30px var(--display); }
+  .spinner { font-size: 56px; animation: bob 1s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(-10px) rotate(-8deg); } }
+  .meter { width: min(360px, 100%); height: 20px; border: 2px solid var(--ink); border-radius: 999px; background: var(--panel-soft); overflow: hidden; }
+  .meter i { display: block; height: 100%; width: 0; background: repeating-linear-gradient(-45deg, var(--yellow) 0 10px, #ffe07a 10px 20px); border-right: 2px solid var(--ink); transition: width .3s; }
+
+  /* ---------- play ---------- */
+  .hud { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .hud .topic { font: 22px var(--display); display: flex; gap: 8px; align-items: center; }
+  .hud .stats { display: flex; gap: 8px; }
+  .stat { background: var(--ink); color: #fff; border-radius: 8px; padding: 4px 10px; font: 16px var(--display); font-variant-numeric: tabular-nums; }
+  .stat b { color: var(--yellow); font-weight: 400; }
+  .timer { height: 14px; border: 2px solid var(--ink); border-radius: 999px; overflow: hidden; background: var(--panel-soft); }
+  .timer i { display: block; height: 100%; width: 100%; background: var(--good); transform-origin: left; }
+  .timer.low i { background: var(--bad); }
+  .qbox {
+    background: var(--panel-soft); border: 2px solid var(--ink); border-radius: 12px;
+    padding: 22px 20px; font: 25px/1.4 var(--display); text-wrap: balance; position: relative;
+  }
+  .qbox .qn { display: inline-block; background: var(--pink); color: #fff; border: 2px solid var(--ink); border-radius: 8px; padding: 0 9px; font-size: 18px; margin-right: 8px; vertical-align: 3px; }
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 560px) { .choices { grid-template-columns: 1fr; } }
+  .choice {
+    font: 18px/1.35 var(--body); color: var(--ink); text-align: left; cursor: pointer;
+    background: #fff; border: 2px solid var(--ink); border-radius: 10px; padding: 12px 14px;
+    box-shadow: 0 3px 0 var(--ink); display: flex; gap: 10px; align-items: center;
+  }
+  .choice:hover:not(:disabled) { background: #fff7d1; }
+  .choice:focus-visible { outline: 3px solid var(--bar-hi); outline-offset: 2px; }
+  .choice .k { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--ink); display: grid; place-items: center; font: 16px var(--display); background: var(--yellow); }
+  .choice:disabled { cursor: default; }
+  .choice.right { background: var(--good-soft); border-color: var(--good); box-shadow: 0 3px 0 var(--good); }
+  .choice.right .k { background: var(--good); color: #fff; border-color: var(--good); }
+  .choice.wrong { background: var(--bad-soft); border-color: var(--bad); box-shadow: 0 3px 0 var(--bad); }
+  .choice.wrong .k { background: var(--bad); color: #fff; border-color: var(--bad); }
+  .choice.dim { opacity: .55; }
+  .verdict { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; border-radius: 12px; padding: 12px 14px; border: 2px solid; }
+  .verdict.ok { background: var(--good-soft); border-color: var(--good); }
+  .verdict.no { background: var(--bad-soft); border-color: var(--bad); }
+  .verdict .v { font: 24px var(--display); }
+  .verdict.ok .v { color: var(--good); }
+  .verdict.no .v { color: var(--bad); }
+  .verdict p { margin: 2px 0 0; max-width: 60ch; }
+
+  /* ---------- result ---------- */
+  .result-top { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; }
+  @media (max-width: 560px) { .result-top { grid-template-columns: 1fr; text-align: center; justify-items: center; } }
+  .grade { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--ink); background: var(--yellow); display: grid; place-items: center; font: 64px/1 var(--display); box-shadow: 0 5px 0 var(--ink); }
+  .result-top h3 { margin: 0; font: 30px var(--display); }
+  .result-top .nums { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  @media (max-width: 560px) { .result-top .nums { justify-content: center; } }
+  .rank { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .rank th { font: 14px var(--display); color: var(--ink-soft); text-align: left; padding: 6px 8px; border-bottom: 2px solid var(--ink); }
+  .rank td { padding: 7px 8px; border-bottom: 1px dashed var(--line); }
+  .rank td:first-child { font: 17px var(--display); width: 46px; }
+  .rank td.num { text-align: right; }
+  .rank tr.me td { background: #fff7d1; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scenery" aria-hidden="true">
+  <i class="cloud c1"></i><i class="cloud c2"></i><i class="cloud c3"></i><i class="cloud c4"></i>
+  <i class="island i1"></i><i class="island i2"></i>
+</div>
+<div class="wrap">
+  <header class="logo">
+    <div class="brand">
+      <div class="qcoin" aria-hidden="true">Q</div>
+      <div class="logo-sub">추억의</div>
+      <h1 class="logo-main"><span class="s" aria-hidden="true">큐플레이</span><span class="f">큐플레이</span></h1>
+      <small>주제만 적으면 문제가 뚝딱! 친구들이 만든 퀴즈도 풀어보세요</small>
+    </div>
+    <div class="nick-chip" id="nickChip">
+      <label for="nick">닉네임</label>
+      <input id="nick" maxlength="12" placeholder="예) 퀴즈왕" autocomplete="off">
+    </div>
+  </header>
+
+  <!-- LOBBY -->
+  <section id="lobby" class="wrap" style="gap:22px">
+    <div class="win">
+      <div class="win-bar"><h2>새 퀴즈 출제하기</h2><div class="dots"><i></i><i></i><i></i></div></div>
+      <form class="win-body" id="createForm">
+        <div class="field">
+          <label class="lab" for="topic">문제 유형 <span>어떤 주제든 입력하세요</span></label>
+          <div class="topic-row">
+            <input id="topic" maxlength="30" placeholder="예) K-pop, 조선시대 왕, 포켓몬" autocomplete="off">
+          </div>
+          <div class="suggest" id="suggest">
+            <button type="button">K-pop</button>
+            <button type="button">2000년대 추억의 게임</button>
+            <button type="button">한국사</button>
+            <button type="button">세계 수도</button>
+            <button type="button">해리포터</button>
+          </div>
+        </div>
+        <div class="opts">
+          <div class="field">
+            <span class="lab">난이도</span>
+            <div class="seg" role="radiogroup" aria-label="난이도">
+              <input type="radio" name="diff" id="d-easy" value="easy" checked><label for="d-easy">쉬움</label>
+              <input type="radio" name="diff" id="d-normal" value="normal"><label for="d-normal">중간</label>
+              <input type="radio" name="diff" id="d-hard" value="hard"><label for="d-hard">어려움</label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="lab">문제 개수</span>
+            <div class="seg" role="radiogroup" aria-label="문제 개수">
+              <input type="radio" name="cnt" id="c5" value="5"><label for="c5">5개</label>
+              <input type="radio" name="cnt" id="c10" value="10" checked><label for="c10">10개</label>
+              <input type="radio" name="cnt" id="c15" value="15"><label for="c15">15개</label>
+              <input type="radio" name="cnt" id="c20" value="20"><label for="c20">20개</label>
+            </div>
+          </div>
+        </div>
+        <div class="create-row">
+          <button class="btn" type="submit" id="createBtn">퀴즈 만들고 시작! ▶</button>
+          <span class="note" id="createNote">만든 퀴즈는 아래 보관함에 저장되어 다른 참가자도 풀 수 있어요.</span>
+        </div>
+      </form>
+    </div>
+
+    <div class="win">
+      <div class="win-bar"><h2>퀴즈 보관함</h2><span class="note" style="color:#dbe8ff" id="archiveCount"></span></div>
+      <div class="win-body">
+        <div class="tabs" id="tabs" role="toolbar" aria-label="분류"></div>
+        <div id="archive" style="display:grid;gap:18px">
+          <div class="empty"><b>보관함 불러오는 중…</b>잠시만 기다려 주세요.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOADING -->
+  <section id="loading" class="win" hidden>
+    <div class="win-bar"><h2>출제 중</h2><div class="dots"><i></i><i></i><i></i></div></div>
+    <div class="loading">
+      <div class="spinner" aria-hidden="true">✏️</div>
+      <div class="big" id="loadTitle">문제를 만들고 있어요</div>
+      <div class="meter"><i id="loadBar"></i></div>
+      <div class="note" id="loadNote">보통 20~60초 정도 걸려요.</div>
+      <button class="btn ghost" type="button" id="cancelBtn">취소</button>
+    </div>
+  </section>
+
+  <!-- PLAY -->
+  <section id="play" class="win" hidden>
+    <div class="win-bar"><h2 id="playBarTitle">퀴즈</h2><div class="dots"><i></i><i></i><i></i></div></div>
+    <div class="win-body">
+      <div class="hud">
+        <div class="topic" id="playTopic"></div>
+        <div class="stats">
+          <span class="stat">문제 <b id="hudQ">1/10</b></span>
+          <span class="stat">점수 <b id="hudScore">0</b></span>
+        </div>
+      </div>
+      <div class="timer" id="timer"><i id="timerBar"></i></div>
+      <div class="qbox" id="qbox"></div>
+      <div class="choices" id="choices"></div>
+      <div id="verdict" hidden></div>
+      <div class="actions"><button class="btn ghost" type="button" id="quitBtn">그만하고 로비로</button></div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="win" hidden>
+    <div class="win-bar"><h2>결과 발표</h2><div class="dots"><i></i><i></i><i></i></div></div>
+    <div class="win-body">
+      <div class="result-top">
+        <div class="grade" id="grade">A</div>
+        <div>
+          <h3 id="resTitle"></h3>
+          <div class="nums">
+            <span class="stat">정답 <b id="resCorrect"></b></span>
+            <span class="stat">점수 <b id="resScore"></b></span>
+          </div>
+          <p class="note" id="resMsg" style="margin:8px 0 0"></p>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lab">이 퀴즈 명예의 전당 <span>상위 10명</span></span>
+        <div style="overflow-x:auto"><table class="rank"><thead><tr><th>순위</th><th>닉네임</th><th class="num" style="text-align:right">정답</th><th class="num" style="text-align:right">점수</th></tr></thead><tbody id="rankBody"></tbody></table></div>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" id="retryBtn">다시 풀기</button>
+        <button class="btn ghost" type="button" id="homeBtn">로비로</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const DIFF = { easy: "쉬움", normal: "중간", hard: "어려움" };
+  const CATS = ["음악", "영화·드라마", "스포츠", "역사", "과학", "게임", "음식", "지리·여행", "문학·만화", "상식", "기타"];
+  const TIME = 20;
+
+  let loadError = false;
+  let quizzes = [];
+
+  async function api(path, opts = {}) {
+    const res = await fetch(path, {
+      ...opts,
+      headers: { "Content-Type": "application/json" },
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw { code: "server", message: data.error || "서버와 통신하지 못했어요." };
+    return data;
+  }
+  let activeTab = "전체";
+  let game = null;
+  let genCtl = null;
+
+  // ---------- nickname ----------
+  const nickEl = $("nick");
+  try { nickEl.value = localStorage.getItem("qplay-nick") || ""; } catch (e) {}
+  nickEl.addEventListener("input", () => {
+    $("nickChip").classList.remove("need");
+    try { localStorage.setItem("qplay-nick", nickEl.value.trim()); } catch (e) {}
+  });
+  function requireNick() {
+    const n = nickEl.value.trim();
+    if (n) return n;
+    const chip = $("nickChip");
+    chip.classList.remove("need"); void chip.offsetWidth; chip.classList.add("need");
+    nickEl.focus();
+    return null;
+  }
+
+  // ---------- screens ----------
+  function show(id) {
+    for (const s of ["lobby", "loading", "play", "result"]) $(s).hidden = s !== id;
+    window.scrollTo({ top: 0 });
+  }
+
+  // ---------- lobby ----------
+  $("suggest").addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON") { $("topic").value = e.target.textContent; $("topic").focus(); }
+  });
+
+  function fmtDate(ms) {
+    if (!ms) return "";
+    const d = new Date(ms);
+    return `${d.getMonth() + 1}.${d.getDate()}`;
+  }
+
+  function renderArchive() {
+    const counts = {};
+    for (const q of quizzes) counts[q.category] = (counts[q.category] || 0) + 1;
+    const cats = CATS.filter((c) => counts[c]).concat(Object.keys(counts).filter((c) => !CATS.includes(c)));
+    if (activeTab !== "전체" && !counts[activeTab]) activeTab = "전체";
+
+    const tabs = $("tabs");
+    tabs.replaceChildren();
+    const mkTab = (name, n) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(activeTab === name));
+      b.append(name);
+      const c = document.createElement("b"); c.textContent = n; b.append(c);
+      b.onclick = () => { activeTab = name; renderArchive(); };
+      tabs.append(b);
+    };
+    if (quizzes.length) { mkTab("전체", quizzes.length); cats.forEach((c) => mkTab(c, counts[c])); }
+    $("archiveCount").textContent = quizzes.length ? `총 ${quizzes.length}개` : "";
+
+    const box = $("archive");
+    box.replaceChildren();
+    if (loadError && !quizzes.length) {
+      box.innerHTML = '<div class="empty"><b>보관함에 연결할 수 없어요</b>서버가 켜져 있는지 확인해 주세요.</div>';
+      return;
+    }
+    if (!quizzes.length) {
+      box.innerHTML = '<div class="empty"><b>아직 만들어진 퀴즈가 없어요</b>위에서 첫 번째 퀴즈를 출제해 보세요!</div>';
+      return;
+    }
+    const show = activeTab === "전체" ? cats : [activeTab];
+    for (const cat of show) {
+      const g = document.createElement("div"); g.className = "group";
+      const h = document.createElement("h3"); h.textContent = cat; g.append(h);
+      const grid = document.createElement("div"); grid.className = "cards";
+      for (const q of quizzes.filter((x) => x.category === cat)) grid.append(card(q));
+      g.append(grid); box.append(g);
+    }
+  }
+
+  function card(q) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "card";
+    b.setAttribute("aria-label", `${q.title} 문제 풀기`);
+    const emo = document.createElement("span"); emo.className = "emo"; emo.textContent = q.emoji || "❓";
+    const t = document.createElement("span"); t.className = "t"; t.textContent = `${q.title} 문제`;
+    const m = document.createElement("span"); m.className = "m";
+    const p = document.createElement("span"); p.className = `pill ${q.difficulty}`; p.textContent = DIFF[q.difficulty] || "중간";
+    m.append(p, `${q.questions.length}문제`, q.playCount ? ` · ${q.playCount}번 플레이` : "");
+    const by = document.createElement("span"); by.className = "by";
+    const who = document.createElement("strong"); who.textContent = `출제 ${q.creator || "익명"}`;
+    const when = document.createElement("span"); when.textContent = fmtDate(q.createdAt);
+    by.append(who, when);
+    b.append(emo, t, m, by);
+    b.onclick = () => { if (requireNick()) startGame(q); };
+    return b;
+  }
+
+  function validQuiz(d) {
+    return d && typeof d.title === "string" && Array.isArray(d.questions) && d.questions.length &&
+      d.questions.every((x) => x && typeof x.q === "string" && Array.isArray(x.choices) && x.choices.length === 4 &&
+        Number.isInteger(x.answer) && x.answer >= 0 && x.answer < 4);
+  }
+
+  // ---------- create ----------
+  const note = $("createNote");
+  const noteDefault = note.textContent;
+  function setNote(msg, err) { note.textContent = msg || noteDefault; note.classList.toggle("err", !!err); }
+
+  $("createForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nick = requireNick(); if (!nick) return;
+    const topic = $("topic").value.trim();
+    if (!topic) { setNote("문제 유형을 입력해 주세요.", true); $("topic").focus(); return; }
+    const difficulty = document.querySelector('input[name="diff"]:checked').value;
+    const count = Number(document.querySelector('input[name="cnt"]:checked').value);
+    setNote();
+
+    show("loading");
+    $("loadTitle").textContent = `"${topic}" 문제를 만들고 있어요`;
+    $("loadBar").style.width = "4%";
+    $("loadNote").textContent = "생각하는 중… 보통 20~60초 정도 걸려요.";
+    genCtl = new AbortController();
+
+    // 서버가 OpenAI로 문제를 만들고 보관함에 저장해요 (진행 막대는 예상 시간 기준)
+    const expectMs = 6000 + count * 2200, t0 = Date.now();
+    const prog = setInterval(() => {
+      const r = 1 - Math.exp(-(Date.now() - t0) / expectMs);
+      $("loadBar").style.width = `${Math.min(95, 4 + r * 95)}%`;
+      $("loadNote").textContent = `약 ${Math.min(count, Math.floor(r * count))} / ${count} 문제 출제 중…`;
+    }, 300);
+
+    try {
+      const quiz = await api("/api/generate", {
+        method: "POST",
+        signal: genCtl.signal,
+        body: { topic, difficulty, count, creator: nick },
+      });
+      $("loadBar").style.width = "100%";
+      $("topic").value = "";
+      refreshArchive();
+      startGame(quiz);
+    } catch (err) {
+      show("lobby");
+      const cancelled = err && err.name === "AbortError";
+      setNote(cancelled ? "출제를 취소했어요." : (err && err.message) || "출제 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.", !cancelled);
+    } finally {
+      clearInterval(prog);
+      genCtl = null;
+    }
+  });
+  $("cancelBtn").onclick = () => genCtl && genCtl.abort();
+
+  // ---------- game ----------
+  function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+  function startGame(quiz) {
+    const qs = quiz.questions.map((x) => {
+      const order = shuffle([0, 1, 2, 3]);
+      return { q: x.q, explain: x.explain, choices: order.map((i) => x.choices[i]), answer: order.indexOf(x.answer) };
+    });
+    game = { quiz, qs, i: 0, score: 0, correct: 0, locked: false, raf: 0, start: 0 };
+    $("playBarTitle").textContent = `${quiz.title} 문제 · ${DIFF[quiz.difficulty] || ""}`;
+    $("playTopic").textContent = `${quiz.emoji || "❓"} ${quiz.title} 문제`;
+    show("play");
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    const g = game, cur = g.qs[g.i];
+    g.locked = false;
+    $("hudQ").textContent = `${g.i + 1}/${g.qs.length}`;
+    $("hudScore").textContent = g.score.toLocaleString();
+    const qb = $("qbox"); qb.replaceChildren();
+    const n = document.createElement("span"); n.className = "qn"; n.textContent = `Q${g.i + 1}`;
+    qb.append(n, cur.q);
+    const ch = $("choices"); ch.replaceChildren();
+    cur.choices.forEach((c, idx) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "choice";
+      const k = document.createElement("span"); k.className = "k"; k.textContent = idx + 1;
+      const s = document.createElement("span"); s.textContent = c;
+      b.append(k, s);
+      b.onclick = () => answer(idx);
+      ch.append(b);
+    });
+    $("verdict").hidden = true;
+    g.start = performance.now();
+    cancelAnimationFrame(g.raf);
+    tick();
+  }
+
+  function tick() {
+    const g = game; if (!g || g.locked) return;
+    const left = Math.max(0, TIME - (performance.now() - g.start) / 1000);
+    $("timerBar").style.transform = `scaleX(${left / TIME})`;
+    $("timer").classList.toggle("low", left < 5);
+    if (left <= 0) return answer(-1);
+    g.raf = requestAnimationFrame(tick);
+  }
+
+  function answer(idx) {
+    const g = game; if (!g || g.locked) return;
+    g.locked = true;
+    cancelAnimationFrame(g.raf);
+    const cur = g.qs[g.i];
+    const left = Math.max(0, TIME - (performance.now() - g.start) / 1000);
+    const ok = idx === cur.answer;
+    let gained = 0;
+    if (ok) { gained = 100 + Math.round(left * 5); g.score += gained; g.correct++; }
+    $("hudScore").textContent = g.score.toLocaleString();
+    [...$("choices").children].forEach((b, i) => {
+      b.disabled = true;
+      if (i === cur.answer) b.classList.add("right");
+      else if (i === idx) b.classList.add("wrong");
+      else b.classList.add("dim");
+    });
+    const v = $("verdict");
+    v.className = `verdict ${ok ? "ok" : "no"}`;
+    v.replaceChildren();
+    const left_ = document.createElement("div");
+    const t = document.createElement("div"); t.className = "v";
+    t.textContent = ok ? `딩동댕! +${gained}` : idx === -1 ? "시간 초과!" : "땡!";
+    const p = document.createElement("p");
+    p.textContent = (ok ? "" : `정답: ${cur.choices[cur.answer]}. `) + (cur.explain || "");
+    left_.append(t, p);
+    const next = document.createElement("button");
+    next.type = "button"; next.className = "btn blue";
+    const last = g.i === g.qs.length - 1;
+    next.textContent = last ? "결과 보기 ▶" : "다음 문제 ▶";
+    next.onclick = () => { if (last) finish(); else { g.i++; renderQuestion(); } };
+    v.append(left_, next);
+    v.hidden = false;
+    next.focus({ preventScroll: true });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if ($("play").hidden || !game || game.locked) return;
+    const n = Number(e.key);
+    if (n >= 1 && n <= 4) answer(n - 1);
+  });
+
+  $("quitBtn").onclick = () => { if (game) cancelAnimationFrame(game.raf); game = null; show("lobby"); };
+
+  async function finish() {
+    const g = game, total = g.qs.length, rate = g.correct / total;
+    const grade = rate === 1 ? "S" : rate >= .8 ? "A" : rate >= .6 ? "B" : rate >= .4 ? "C" : "D";
+    $("grade").textContent = grade;
+    $("resTitle").textContent = `${g.quiz.emoji || ""} ${g.quiz.title} 문제 완료!`;
+    $("resCorrect").textContent = `${g.correct}/${total}`;
+    $("resScore").textContent = g.score.toLocaleString();
+    $("resMsg").textContent = { S: "완벽해요! 이 분야의 퀴즈왕!", A: "대단해요! 거의 다 맞혔어요.", B: "좋아요! 조금만 더 하면 A등급.", C: "아쉬워요. 다시 도전해 볼까요?", D: "어려웠죠? 해설 보고 다시 도전!" }[grade];
+    show("result");
+
+    const body = $("rankBody");
+    body.innerHTML = '<tr><td colspan="4" class="note">기록 불러오는 중…</td></tr>';
+    const nick = nickEl.value.trim() || "익명";
+    let myId = null;
+    if (g.quiz.id) {
+      try {
+        const { myId, top } = await api(`/api/plays?id=${encodeURIComponent(g.quiz.id)}`, {
+          method: "POST",
+          body: { nick, score: g.score, correct: g.correct },
+        });
+        body.replaceChildren();
+        top.forEach((r, i) => {
+          const tr = document.createElement("tr");
+          if (r.id === myId) tr.className = "me";
+          const cells = [["🥇", "🥈", "🥉"][i] || String(i + 1), r.nick, `${r.correct}/${r.total}`, Number(r.score).toLocaleString()];
+          cells.forEach((c, ci) => { const td = document.createElement("td"); td.textContent = c; if (ci >= 2) td.className = "num"; tr.append(td); });
+          body.append(tr);
+        });
+        if (!top.some((r) => r.id === myId)) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = '<td colspan="4" class="note">이번 기록은 10위 밖이에요. 다시 도전해 보세요!</td>';
+          body.append(tr);
+        }
+        refreshArchive();
+      } catch (e) {
+        body.innerHTML = '<tr><td colspan="4" class="note">기록을 저장하거나 불러오지 못했어요.</td></tr>';
+      }
+    }
+  }
+
+  $("retryBtn").onclick = () => game && startGame(game.quiz);
+  $("homeBtn").onclick = () => { game = null; show("lobby"); };
+
+  // ---------- archive sync ----------
+  async function refreshArchive() {
+    try {
+      const list = await api("/api/quizzes");
+      const first = !refreshArchive.done || loadError;
+      refreshArchive.done = true;
+      loadError = false;
+      const next = list.filter(validQuiz);
+      if (first || JSON.stringify(next.map((q) => [q.id, q.playCount])) !== JSON.stringify(quizzes.map((q) => [q.id, q.playCount]))) {
+        quizzes = next;
+        renderArchive();
+      }
+    } catch (e) {
+      if (!loadError) { loadError = true; renderArchive(); }
+    }
+  }
+  refreshArchive();
+  setInterval(() => { if (!$("lobby").hidden && !document.hidden) refreshArchive(); }, 5000);
+})();
+</script>
+</body>
+</html>
