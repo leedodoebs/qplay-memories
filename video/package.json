@@ -1,0 +1,24 @@
+{
+  "name": "qplay-intro-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "추억의 큐플레이 소개 영상 (Remotion)",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render QplayIntro out/qplay-intro.mp4",
+    "still": "remotion still QplayIntro"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.524",
+    "@remotion/cli": "4.0.524",
+    "@remotion/renderer": "4.0.524",
+    "@remotion/google-fonts": "4.0.524",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "remotion": "4.0.524"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^5.6.0"
+  }
+}

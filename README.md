@@ -62,3 +62,14 @@ npm start
 ## 배포 (Vercel)
 
 `public/`은 정적 페이지로, `api/*.js`는 서버리스 함수로 배포됩니다. Vercel 프로젝트 설정에서 위 환경변수를 등록하고, 저장소로 Upstash Redis를 연결하세요.
+
+## 소개 영상 (Remotion)
+
+`video/` 폴더에 30초짜리 소개 영상(1920×1080) 소스가 있습니다. 게임 화면을 React로 다시 그려 애니메이션으로 만들었어요.
+
+```bash
+cd video
+npm install
+npm run studio   # 브라우저에서 미리보기·수정
+npm run render   # out/qplay-intro.mp4 로 렌더링
+```
